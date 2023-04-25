@@ -10,16 +10,21 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     private int score;
     public TextMeshProUGUI gameOverText;
+    public bool isGameActive;
+
 
     // Start is called before the first frame update
     void Start()
     {
         score = 0;
+        UpdateScore(0);
         StartCoroutine(SpawnTarget());
+        isGameActive = true;
     }
 
     public void GameOver()
     {
+        isGameActive = false;
         gameOverText.gameObject.SetActive(true);
     }
 
@@ -30,11 +35,16 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator SpawnTarget()
     {
-        while (true){
+        while (isGameActive){
             yield return new WaitForSeconds(spawnRate);
             int index = Random.Range(0, targets.Count);
             Instantiate(targets[index]);
         }
+    }
+    public void UpdateScore(int scoreToAdd)
+    {
+        score += scoreToAdd;
+        scoreText.text = "Score: " + score;
     }
 
 }
